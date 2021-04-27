@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver android:name="cn.chingshen.gasless.GasPriceAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -24,7 +25,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/gas_price_appwidget_info" />
         </receiver>
-        <receiver android:name=".AlarmManagerBroadcastReceiver" />
     </application>
 
 </manifest>

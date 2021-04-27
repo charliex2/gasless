@@ -1,5 +1,9 @@
 package cn.chingshen.gasless.domain.vos;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * // {
  * //   "code": 200,
@@ -12,33 +16,10 @@ package cn.chingshen.gasless.domain.vos;
  * //   }
  * //}
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GasNowResponse {
     private int code;
     private GasNow data;
-
-    public GasNowResponse() {
-    }
-
-    public GasNowResponse(int code, GasNow data) {
-        this.code = code;
-        this.data = data;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public GasNow getData() {
-        return data;
-    }
-
-    public void setData(GasNow data) {
-        this.data = data;
-    }
-
-
 }

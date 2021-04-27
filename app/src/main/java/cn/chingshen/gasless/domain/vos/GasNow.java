@@ -1,5 +1,13 @@
 package cn.chingshen.gasless.domain.vos;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * // {
  * //       "rapid": 60000000000,
@@ -9,78 +17,35 @@ package cn.chingshen.gasless.domain.vos;
  * //       "timestamp": 1619284003821
  * // }
  */
-public class GasNow {
-    private long rapid;
-    private long fast;
-    private long standard;
-    private long slow;
-    private long timestamp;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 
-    public GasNow() {
+public class GasNow implements Serializable {
+    private long rapid = 0L;
+    private long fast = 0L;
+    private long standard = 0L;
+    private long slow = 0L;
+    private long timestamp = 0L;
+
+    public String getRapidGWei() {
+        return String.valueOf((long) (rapid / 10e8));
     }
 
-    public GasNow(long rapid, long fast, long standard, long slow, long timestamp) {
-        this.rapid = rapid;
-        this.fast = fast;
-        this.standard = standard;
-        this.slow = slow;
-        this.timestamp = timestamp;
+    public String getFastGWei() {
+        return String.valueOf((long) (fast / 10e8));
     }
 
-    public long getRapid() {
-        return rapid;
+    public String getStandardGWei() {
+        return String.valueOf((long) (standard / 10e8));
     }
 
-    public long getRapidGWei() {
-        return (long) (rapid / 10e8);
+    public String getSlowGWei() {
+        return String.valueOf((long) (slow / 10e8));
     }
 
-    public void setRapid(long rapid) {
-        this.rapid = rapid;
-    }
-
-
-    public long getFast() {
-        return fast;
-    }
-
-    public long getFastGWei() {
-        return (long) (fast / 10e8);
-    }
-
-    public void setFast(long fast) {
-        this.fast = fast;
-    }
-
-    public long getStandard() {
-        return standard;
-    }
-
-    public long getStandardGWei() {
-        return (long) (standard / 10e8);
-    }
-
-    public void setStandard(long standard) {
-        this.standard = standard;
-    }
-
-    public long getSlow() {
-        return slow;
-    }
-
-    public long getSlowGWei() {
-        return (long) (slow / 10e8);
-    }
-
-    public void setSlow(long slow) {
-        this.slow = slow;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public String getTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        return simpleDateFormat.format(this.getTimestamp());
     }
 }
