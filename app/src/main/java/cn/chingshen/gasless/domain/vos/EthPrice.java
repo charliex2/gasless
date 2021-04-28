@@ -1,5 +1,6 @@
 package cn.chingshen.gasless.domain.vos;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tx {
-    private int gas;
-    private String name;
-    private String url;
+public class EthPrice {
+    private float cny = 0f;
+    private float usd = 0f;
 
-    public String getName() {
-        return name.trim();
+    public int getUsdInt() {
+        return (int) usd;
     }
 }

@@ -1,5 +1,7 @@
 package cn.chingshen.gasless.domain.vos;
 
+import android.graphics.Color;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -47,5 +49,22 @@ public class GasNow implements Serializable {
     public String getTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
         return simpleDateFormat.format(this.getTimestamp());
+    }
+
+    /**
+     * 全红 (250,0,0)
+     * 全绿 (0,250,0)
+     * 全黄色 (250,250,0)
+     * 由绿变到红，则是G减少、R增加同时进行. 对应 GasPrice 0 - 150
+     *
+     * @return
+     */
+    public int getColor(long wei) {
+        if (wei == 0) return Color.rgb(125, 125, 125);
+        long gwei = (long) (wei / 10e8 / 150 * 250);
+        if (gwei > 250) gwei = 250;
+        int red = (int) gwei;
+        int green = 250 - (int) gwei;
+        return Color.rgb(red, green, 0);
     }
 }

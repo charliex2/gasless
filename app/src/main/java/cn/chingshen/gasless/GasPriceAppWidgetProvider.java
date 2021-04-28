@@ -60,13 +60,6 @@ public class GasPriceAppWidgetProvider extends AppWidgetProvider {
 
     private void requestGasPrice(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, RemoteViews views) {
         Log.i("gasnow", "requestGasPrice");
-//        String url = "https://www.gasnow.org/api/v3/gas/price?utm_source=gasless";
-//        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .readTimeout(30, TimeUnit.SECONDS)
-//                .writeTimeout(30, TimeUnit.SECONDS)
-//                .connectTimeout(30, TimeUnit.SECONDS)
-//                .build();
-//        Request request = new Request.Builder().get().url(url).build();
 
         for (int appWidgetId : appWidgetIds) {
             views.setTextViewText(R.id.last_updated_at, "updating");
@@ -81,9 +74,17 @@ public class GasPriceAppWidgetProvider extends AppWidgetProvider {
                 for (int appWidgetId : appWidgetIds) {
                     Log.i("gasnow", "widget onUpdate");
                     views.setTextViewText(R.id.rapid, gasNow.getRapidGWei());
+                    views.setTextColor(R.id.rapid, gasNow.getColor(gasNow.getRapid()));
+
                     views.setTextViewText(R.id.fast, gasNow.getFastGWei());
+                    views.setTextColor(R.id.fast, gasNow.getColor(gasNow.getFast()));
+
                     views.setTextViewText(R.id.standard, gasNow.getStandardGWei());
+                    views.setTextColor(R.id.standard, gasNow.getColor(gasNow.getStandard()));
+
                     views.setTextViewText(R.id.slow, gasNow.getSlowGWei());
+                    views.setTextColor(R.id.slow, gasNow.getColor(gasNow.getSlow()));
+
                     views.setTextViewText(R.id.last_updated_at, gasNow.getTime());
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }

@@ -13,7 +13,9 @@ public class Api {
 
     public Api(Builder builder) {
         context = builder.context;
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .retryOnConnectionFailure(true)
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(builder.baseUrl)

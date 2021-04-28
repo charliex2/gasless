@@ -16,32 +16,64 @@
         android:background="@drawable/shape_widget_background"
         android:orientation="vertical"
         android:paddingVertical="10dp"
-        tools:background="@color/black">
+        tools:background="@color/light_gray">
 
         <LinearLayout
+            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:paddingBottom="5dp">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="@string/title"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/logo"
+                    android:src="@drawable/ic_logo_green"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/divider"
+                    android:paddingHorizontal="5dp"
+                    android:textSize="12sp"
+                    android:text="|"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:textSize="12sp"
+                    android:text="@string/gas_price_gwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
 
             <ImageView
                 android:layout_width="16sp"
                 android:layout_height="16sp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:contentDescription="@string/refreshing"
                 android:src="@drawable/ic_refresh" />
 
             <TextView
+
+                android:layout_gravity="end"
                 android:id="@+id/last_updated_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

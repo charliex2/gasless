@@ -1,5 +1,7 @@
 package cn.chingshen.gasless.domain.vos;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DappsData {
-    private Dapp[] data;
+    private List<Dapp> data;
 }

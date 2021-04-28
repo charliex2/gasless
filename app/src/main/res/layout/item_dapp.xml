@@ -4,16 +4,29 @@
 
     <data>
 
+        <variable
+            name="dapp"
+            type="cn.chingshen.gasless.domain.vos.Dapp" />
+
+        <variable
+            name="ethPrice"
+            type="cn.chingshen.gasless.domain.vos.EthPrice" />
+
+        <variable
+            name="gasNow"
+            type="cn.chingshen.gasless.domain.vos.GasNow" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp">
 
         <LinearLayout
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/logo"
@@ -23,11 +36,29 @@
 
             <TextView
                 android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="3"
+                android:text="@{dapp.title}"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="@{dapp.tx[0].name }"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Hello Dapp"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAlignment="textEnd"
                 android:textSize="12sp" />
+
         </LinearLayout>
 
 
