@@ -47,19 +47,24 @@ public class DappRecycleViewAdapter extends RecyclerView.Adapter<DappRecycleView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Dapp dapp = dapps.get(position);
-        holder.binding.setDapp(dapp);
-
         double price = 0.0;
         GasNow gasNow = viewModel.getGasNow().getValue();
         EthPrice ethPrice = viewModel.getEthPrice().getValue();
         if (dapp != null && gasNow != null && ethPrice != null) {
             price = dapp.getTx()[0].getGas() * gasNow.getFast() / 10e17 * (double) ethPrice.getUsd();
+            DecimalFormat df = new DecimalFormat(".00");
+            String priceStr = df.format(price);
+//        holder.binding.price.setText(priceStr);
+            dapp.setPriceStr(priceStr);
+            holder.binding.setDapp(dapp);
+            Glide.with(context).load(dapp.getIcon()).into(holder.binding.logo);
         }
-        DecimalFormat df = new DecimalFormat(".00");
-        String priceStr = df.format(price);
-        holder.binding.price.setText(priceStr);
 
-        Glide.with(context).load(dapp.getIcon()).into(holder.binding.logo);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return dapps.get(position).getTitle().hashCode();
     }
 
     @Override

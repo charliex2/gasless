@@ -31,7 +31,13 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void setGasNow(GasNow gasNow) {
+        if (this.gasNow == null) this.gasNow = new MutableLiveData<>();
         this.gasNow.setValue(gasNow);
+    }
+
+    public void postGasNow(GasNow gasNow) {
+        if (this.gasNow == null) this.gasNow = new MutableLiveData<>();
+        this.gasNow.postValue(gasNow);
     }
 
     public LiveData<GasNow> getGasNow() {
@@ -70,7 +76,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         });
     }
 
-    private void requestEthPrice() {
+    public void requestEthPrice() {
         new Api(new Api.Builder(getApplication())).gasNowApi.getEthPrice().enqueue(new Callback<EthPriceResponse>() {
             @Override
             public void onResponse(Call<EthPriceResponse> call, Response<EthPriceResponse> response) {

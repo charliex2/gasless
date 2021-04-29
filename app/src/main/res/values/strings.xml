@@ -1,12 +1,19 @@
 <resources>
     <string name="title">Eth Gas Price (GWei)</string>
-    <string name="app_name" translatable="false">DePoor</string>
-    <string name="rapid_15_s" translatable="false">rapid | 15 s</string>
-    <string name="fast_1_m" translatable="false">fast | 1 m</string>
-    <string name="standard_3_m" translatable="false">standard | 3 m</string>
-    <string name="slow_10_m" translatable="false"><![CDATA[slow | >10 m]]></string>
+    <string name="app_name">DeFarmer</string>
+    <string name="rapid_15_s">rapid | 15 s</string>
+    <string name="fast_1_m">fast | 1 m</string>
+    <string name="standard_3_m">standard | 3 m</string>
+    <string name="slow_10_m"><![CDATA[slow | >10 m]]></string>
+    <string name="refresh">refresh</string>
     <string name="refreshing">refreshing</string>
+    <string name="updating">updating</string>
+    <string name="retry">retry</string>
     <string name="cost_of_transactions">Cost of Defi Transactions</string>
     <string name="gas_price_gwei">Gas Price (GWei)</string>
     <string name="eth_price_now">Eth Price Now</string>
+    <string name="slogan">A Tool for Defi Farmers</string>
+    <string name="data_source">Data Source</string>
+    <string name="feedback">Feedback</string>
+    <string name="buy_me_a_coffee">Buy Me a Coffee</string>
 </resources>

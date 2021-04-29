@@ -1,21 +1,21 @@
 package cn.chingshen.gasless;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.alibaba.fastjson.JSON;
 
@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import cn.chingshen.gasless.databinding.ActivityMainBinding;
 import cn.chingshen.gasless.domain.vos.Dapp;
-import cn.chingshen.gasless.domain.vos.EthPrice;
 import cn.chingshen.gasless.domain.vos.GasNow;
 import cn.chingshen.gasless.domain.vos.GasNowResponse;
 import okhttp3.OkHttpClient;
@@ -41,32 +40,55 @@ import okio.ByteString;
 // https://blog.csdn.net/danpincheng0204/article/details/106778941
 public class MainActivity extends AppCompatActivity {
 
+    SocketThread socketThread = new SocketThread();
     ActivityMainBinding binding;
-    private final Handler handler = new UiHandler();
     private MainActivityViewModel viewModel;
 
     private List<Dapp> dapps = new ArrayList<>();
-    private GasNow gasNow;
-    //    private EthPrice ethPrice;
     private DappRecycleViewAdapter dappRecycleViewAdapter;
 
     AppWidgetManager appWidgetManager;
     RemoteViews remoteViews;
     ComponentName widget;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        gasNow = (GasNow) intent.getSerializableExtra("gasNow");
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        if (gasNow != null) binding.setGasNow(gasNow);
-
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
+        Intent intent = getIntent();
+        GasNow gasNow = (GasNow) intent.getSerializableExtra("gasNow");
+        if (gasNow != null) {
+            binding.setGasNow(gasNow);
+            viewModel.setGasNow(gasNow);
+        }
 
+        initGasNow();
+        initEthPrice();
+        initAppWidget();
+        initDappsRecycleView();
+        initBroadReceiver();
+
+        initBottomInfo();
+        binding.gasPrices.lastUpdatedAt.setOnClickListener(v -> startSocket());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startSocket();
+    }
+
+    private void startSocket() {
+        if (!socketThread.isAlive()) {
+            socketThread.start();
+        }
+    }
+
+    private void initGasNow() {
         binding.gasPrices.logo.setVisibility(View.GONE);
         binding.gasPrices.name.setVisibility(View.GONE);
         binding.gasPrices.divider.setVisibility(View.GONE);
@@ -79,15 +101,30 @@ public class MainActivity extends AppCompatActivity {
             binding.gasPrices.standard.setTextColor(gn.getColor(gn.getStandard()));
             binding.gasPrices.slow.setTextColor(gn.getColor(gn.getSlow()));
 
+            for (int i = 0; i < dapps.size(); i++) {
+                dappRecycleViewAdapter.notifyItemChanged(i);
+            }
+
             refreshAppWidget(gn);
-
-            dappRecycleViewAdapter.notifyDataSetChanged();
         });
+    }
 
-        initEthPrice();
-        initAppWidget();
-        initDappsRecycleView();
-        new SocketThread().start();
+    private void initBottomInfo() {
+        binding.bottom.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void initBroadReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private void initAppWidget() {
@@ -97,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshAppWidget(GasNow gasNow) {
+        if (gasNow.getRapid() == 0) return;
         remoteViews.setTextViewText(R.id.rapid, gasNow.getRapidGWei());
         remoteViews.setTextColor(R.id.rapid, gasNow.getColor(gasNow.getRapid()));
 
@@ -133,35 +171,24 @@ public class MainActivity extends AppCompatActivity {
         dappRecycleViewAdapter.notifyDataSetChanged();
     }
 
-
-    private class UiHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (gasNow != null) {
-                viewModel.setGasNow(gasNow);
-            }
-        }
-    }
-
-
     class SocketThread extends Thread {
         @Override
         public void run() {
             super.run();
             OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                     .retryOnConnectionFailure(true)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .connectTimeout(30, TimeUnit.SECONDS)
                     .build();
 
-            String url = "wss://www.gasnow.org/ws/gasprice";
+            String url = "wss://www.gasnow1.org/ws/gasprice";
             Request request = new Request.Builder().get().url(url).build();
             okHttpClient.newWebSocket(request, new WebSocketListener() {
                 @Override
                 public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                     super.onClosed(webSocket, code, reason);
+                    Log.i("gasnow", "thread closed");
                 }
 
                 @Override
@@ -173,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
                     super.onFailure(webSocket, t, response);
                     Log.i("gasnow", "gasnow websocket failed: " + t.getMessage());
+                    binding.gasPrices.lastUpdatedAt.setText(MainActivity.this.getResources().getString(R.string.retry));
                 }
 
                 @Override
@@ -180,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
                     super.onMessage(webSocket, text);
                     Log.i("gasnow", text);
                     GasNowResponse gasNowResponse = JSON.parseObject(text, GasNowResponse.class);
-                    gasNow = gasNowResponse.getData();
-                    handler.sendEmptyMessage(0);
+                    GasNow gasNow = gasNowResponse.getData();
+                    viewModel.postGasNow(gasNow);
                 }
 
                 @Override
@@ -197,6 +225,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            viewModel.requestEthPrice();
+        }
+    };
 }
 
 

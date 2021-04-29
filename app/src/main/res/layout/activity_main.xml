@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="gasNow"
             type="cn.chingshen.gasless.domain.vos.GasNow" />
@@ -37,16 +36,33 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_logo_green" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_logo" />
 
-                <TextView
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:textColor="@color/light_gray"
+                        android:textSize="12sp"
+                        android:text="@string/slogan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -68,8 +84,6 @@
                     android:text="@string/eth_price_now"
                     android:textSize="10sp" />
             </LinearLayout>
-
-
         </LinearLayout>
 
         <include
@@ -82,8 +96,9 @@
             bind:gasNow="@{gasNow}" />
 
         <LinearLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:background="@drawable/shape_widget_background"
             android:orientation="vertical"
@@ -109,11 +124,11 @@
                     android:layout_width="16sp"
                     android:layout_height="16sp"
                     android:layout_gravity="center"
-                    android:contentDescription="@string/refreshing"
+                    android:contentDescription="@string/refresh"
                     android:src="@drawable/ic_refresh" />
 
                 <TextView
-                    android:id="@+id/last_updated_at"
+                    android:id="@+id/usdt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="USDT"
@@ -128,6 +143,50 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="10"
                 tools:listitem="@layout/item_dapp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottom"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/light_gray"
+                android:textSize="12sp"
+                android:text="@string/data_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:textColor="@color/light_gray"
+                android:textSize="12sp"
+                android:text="@string/feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_marginHorizontal="5dp"
+
+                android:id="@+id/divider3"
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:textColor="@color/light_gray"
+                android:textSize="12sp"
+                android:text="@string/buy_me_a_coffee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

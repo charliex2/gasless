@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DePoor</string>
+    <string name="app_name">DeFarmer</string>
     <string name="title">Eth Gas 价格 (GWei)</string>
     <string name="rapid_15_s" translatable="false">超快 | 15秒</string>
     <string name="slow_10_m" translatable="false"><![CDATA[很慢 | >10分钟]]></string>
     <string name="standard_3_m" translatable="false">一般 | 3分钟</string>
     <string name="fast_1_m" translatable="false">快速 | 1分钟</string>
-    <string name="refreshing">重新刷新</string>
+    <string name="refresh">重新刷新</string>
     <string name="gas_price_gwei">Gas 价格(GWei)</string>
     <string name="eth_price_now">Eth 现价</string>
     <string name="cost_of_transactions">Defi 交易费用</string>
+    <string name="slogan">Defi 农民工具箱</string>
+    <string name="data_source">数据来源</string>
+    <string name="feedback">问题反馈</string>
+    <string name="buy_me_a_coffee">给我打赏</string>
+    <string name="retry">请重试</string>
+    <string name="refreshing">正在刷新</string>
+    <string name="updating">正在更新</string>
 </resources>

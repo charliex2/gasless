@@ -12,5 +12,5 @@ public class Dapp {
     private String[] tag;
     private String title;
     private Tx[] tx;
-
+    private String priceStr;
 }
