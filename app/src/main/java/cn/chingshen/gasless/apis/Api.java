@@ -22,6 +22,7 @@ public class Api {
                 .client(client)
                 .build();
         gasNowApi = retrofit.create(GasNowApi.class);
+
     }
 
     public static class Builder {

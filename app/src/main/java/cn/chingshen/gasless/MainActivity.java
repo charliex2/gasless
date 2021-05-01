@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -40,7 +39,6 @@ import okio.ByteString;
 // https://blog.csdn.net/danpincheng0204/article/details/106778941
 public class MainActivity extends AppCompatActivity {
 
-    SocketThread socketThread = new SocketThread();
     ActivityMainBinding binding;
     private MainActivityViewModel viewModel;
 
@@ -71,20 +69,24 @@ public class MainActivity extends AppCompatActivity {
         initAppWidget();
         initDappsRecycleView();
         initBroadReceiver();
-
         initBottomInfo();
-        binding.gasPrices.lastUpdatedAt.setOnClickListener(v -> startSocket());
+        initCurrency();
+
+        SocketThread socketThread = new SocketThread();
+        socketThread.start();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startSocket();
+    private void initCurrency() {
+        binding.btnChange.setOnClickListener(v -> viewModel.setCurrency(viewModel.getCurrency().getValue().equals("USD") ? "ETH" : "USD"));
+        viewModel.getCurrency().observe(this, s -> {
+            refreshRecycleViewItems();
+            binding.setCurrency(s);
+        });
     }
 
-    private void startSocket() {
-        if (!socketThread.isAlive()) {
-            socketThread.start();
+    private void refreshRecycleViewItems() {
+        for (int i = 0; i < dapps.size(); i++) {
+            dappRecycleViewAdapter.notifyItemChanged(i);
         }
     }
 
@@ -100,11 +102,7 @@ public class MainActivity extends AppCompatActivity {
             binding.gasPrices.fast.setTextColor(gn.getColor(gn.getFast()));
             binding.gasPrices.standard.setTextColor(gn.getColor(gn.getStandard()));
             binding.gasPrices.slow.setTextColor(gn.getColor(gn.getSlow()));
-
-            for (int i = 0; i < dapps.size(); i++) {
-                dappRecycleViewAdapter.notifyItemChanged(i);
-            }
-
+            refreshRecycleViewItems();
             refreshAppWidget(gn);
         });
     }
@@ -154,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private void initEthPrice() {
         viewModel.getEthPrice().observe(this, ethPrice -> {
             binding.setEthPrice(ethPrice);
+            refreshRecycleViewItems();
         });
     }
 
@@ -172,9 +171,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class SocketThread extends Thread {
-        @Override
-        public void run() {
-            super.run();
+
+        private int startSocketTime = 0;
+
+        private void startSocket() {
+            Log.i("gasnow", "starting socket " + startSocketTime);
             OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                     .retryOnConnectionFailure(true)
                     .readTimeout(30, TimeUnit.SECONDS)
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .build();
 
-            String url = "wss://www.gasnow1.org/ws/gasprice";
+            String url = "wss://www.gasnow.org/ws/gasprice";
             Request request = new Request.Builder().get().url(url).build();
             okHttpClient.newWebSocket(request, new WebSocketListener() {
                 @Override
@@ -194,13 +195,20 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                     super.onClosing(webSocket, code, reason);
+                    Log.i("gasnow", "gasnow websocket onClosing");
                 }
 
                 @Override
                 public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
                     super.onFailure(webSocket, t, response);
                     Log.i("gasnow", "gasnow websocket failed: " + t.getMessage());
-                    binding.gasPrices.lastUpdatedAt.setText(MainActivity.this.getResources().getString(R.string.retry));
+                    // 尝试 5 次
+                    if (startSocketTime < 5) {
+                        startSocket();
+                        startSocketTime++;
+                    } else {
+                        binding.gasPrices.lastUpdatedAt.setText(MainActivity.this.getResources().getString(R.string.retry));
+                    }
                 }
 
                 @Override
@@ -223,6 +231,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("gasnow", "gasnow websocket connected");
                 }
             });
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            startSocket();
         }
     }
 

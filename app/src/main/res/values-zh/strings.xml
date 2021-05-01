@@ -17,4 +17,7 @@
     <string name="retry">请重试</string>
     <string name="refreshing">正在刷新</string>
     <string name="updating">正在更新</string>
+    <string name="data_source_text">本应用的数据来源于 SparkPool (gasnow.org).</string>
+    <string name="feedback_text">任何意见或者建议、以及 Bug 报告请发送邮件至 themailfromw@gmail.com</string>
+    <string name="buy_me_a_coffee_text">欢迎各位大佬打赏支持我的开发。我将珍惜每一个打赏的币</string>
 </resources>

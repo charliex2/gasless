@@ -1,7 +1,6 @@
 package cn.chingshen.gasless;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -25,9 +24,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     private MutableLiveData<GasNow> gasNow;
     private MutableLiveData<List<Dapp>> dapps;
     private MutableLiveData<EthPrice> ethPrice;
+    private MutableLiveData<String> currency;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        currency = new MutableLiveData<>();
+        currency.setValue("USD");
     }
 
     public void setGasNow(GasNow gasNow) {
@@ -58,6 +60,15 @@ public class MainActivityViewModel extends AndroidViewModel {
             dapps = new MutableLiveData<>();
         }
         return dapps;
+    }
+
+
+    public MutableLiveData<String> getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency.setValue(currency);
     }
 
     private void requestDapps() {

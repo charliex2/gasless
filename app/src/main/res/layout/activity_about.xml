@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".AboutActivity">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:gravity="center_vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
@@ -27,11 +27,11 @@
                 android:src="@drawable/ic_logo" />
 
             <LinearLayout
-                android:layout_marginLeft="10dp"
-
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -41,11 +41,11 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:textColor="@color/light_gray"
-                    android:textSize="12sp"
-                    android:text="@string/slogan"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/slogan"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
             </LinearLayout>
 
 
@@ -55,48 +55,92 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
-            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/data_source"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="The Data is provided by SparkPool (gasnow.org)."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:text="@string/data_source_text"
+            android:textIsSelectable="true" />
 
         <TextView
-            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Any questions and advices, please email me ( themailfromw@gmail.com )."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:text="@string/feedback_text"
+            android:textIsSelectable="true" />
 
         <TextView
-            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/buy_me_a_coffee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold" />
 
         <TextView
-            android:text="Any coins are appreciated!"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/buy_me_a_coffee_text"
+            android:textIsSelectable="true" />
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_green"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="ERC20: 0x2f1ebEb697d23B2ACCE69c5C1Bce63Afb025c679"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/light_green"
+                android:padding="5dp"
+                android:text="TRC20: TYkDmAQVj76SHgPTd5P9A5jVkPovQXCy7k"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/light_green"
+                android:padding="5dp"
+                android:text="BTC: 3Kb7ZNF5Q3EAcGqKVqyfx3gevZ2rjZ2m3z"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/light_green"
+                android:padding="5dp"
+                android:text="BEP20: 0x9f67b63c3c0bce81e1aa517209215f47afbc0676"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

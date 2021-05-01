@@ -19,4 +19,6 @@ public interface GasNowApi {
     // https://www.gasnow.org/api/v1/eth/price?utm_source=web
     @GET(value = "/api/v1/eth/price?utm_source=web")
     Call<EthPriceResponse> getEthPrice();
+
+
 }

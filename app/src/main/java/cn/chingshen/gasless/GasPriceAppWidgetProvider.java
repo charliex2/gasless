@@ -16,7 +16,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GasPriceAppWidgetProvider extends AppWidgetProvider {
-    String action = "android.appwidget.action.APPWIDGET_UPDATE";
     GasNow gasNow;
 
     @Override
@@ -36,12 +35,11 @@ public class GasPriceAppWidgetProvider extends AppWidgetProvider {
         Log.i("gasnow", "GasPriceAppWidgetProvider onUpdate");
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.layout_gas_price_appwidget);
 
-        Intent intentRefresh = new Intent(action);
+        Intent intentRefresh = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
         intentRefresh.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
         PendingIntent pIntentRefresh = PendingIntent.getBroadcast(context, 0, intentRefresh, 0);
-        views.setOnClickPendingIntent(R.id.last_updated_at, pIntentRefresh);
+        views.setOnClickPendingIntent(R.id.btn_refresh, pIntentRefresh);
         requestGasPrice(context, appWidgetManager, appWidgetIds, views);
-
         setActivityIntent(context, views);
     }
 
@@ -61,7 +59,6 @@ public class GasPriceAppWidgetProvider extends AppWidgetProvider {
 
     private void requestGasPrice(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, RemoteViews views) {
         Log.i("gasnow", "requestGasPrice");
-
         for (int appWidgetId : appWidgetIds) {
             views.setTextViewText(R.id.last_updated_at, context.getResources().getString(R.string.updating));
             appWidgetManager.updateAppWidget(appWidgetId, views);

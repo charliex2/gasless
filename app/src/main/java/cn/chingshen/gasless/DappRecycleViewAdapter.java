@@ -1,8 +1,6 @@
 package cn.chingshen.gasless;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -50,16 +48,21 @@ public class DappRecycleViewAdapter extends RecyclerView.Adapter<DappRecycleView
         double price = 0.0;
         GasNow gasNow = viewModel.getGasNow().getValue();
         EthPrice ethPrice = viewModel.getEthPrice().getValue();
+        String currency = viewModel.getCurrency().getValue();
         if (dapp != null && gasNow != null && ethPrice != null) {
-            price = dapp.getTx()[0].getGas() * gasNow.getFast() / 10e17 * (double) ethPrice.getUsd();
-            DecimalFormat df = new DecimalFormat(".00");
+            String format = "0.00";
+            price = dapp.getTx()[0].getGas() * gasNow.getFast() / 10e17;
+            if (currency.equals("ETH")) {
+                format = "0.0000";
+            } else {
+                price = price * (double) ethPrice.getUsd();
+            }
+            DecimalFormat df = new DecimalFormat(format);
             String priceStr = df.format(price);
-//        holder.binding.price.setText(priceStr);
             dapp.setPriceStr(priceStr);
             holder.binding.setDapp(dapp);
             Glide.with(context).load(dapp.getIcon()).into(holder.binding.logo);
         }
-
     }
 
     @Override

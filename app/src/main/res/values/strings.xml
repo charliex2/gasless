@@ -16,4 +16,7 @@
     <string name="data_source">Data Source</string>
     <string name="feedback">Feedback</string>
     <string name="buy_me_a_coffee">Buy Me a Coffee</string>
+    <string name="data_source_text">The data is provided by SparkPool (gasnow.org).</string>
+    <string name="feedback_text">Any questions and advices, please email me ( themailfromw@gmail.com ).</string>
+    <string name="buy_me_a_coffee_text">Any coins are appreciated!</string>
 </resources>

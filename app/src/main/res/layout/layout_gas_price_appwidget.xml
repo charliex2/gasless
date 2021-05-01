@@ -22,9 +22,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15dp"
-            android:layout_marginBottom="5dp">
+            android:paddingHorizontal="15dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -65,23 +65,31 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-
-            <ImageView
-                android:layout_width="16sp"
-                android:layout_height="16sp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/refresh"
-                android:src="@drawable/ic_refresh" />
-
-            <TextView
-                android:id="@+id/last_updated_at"
+            <LinearLayout
+                android:id="@+id/btn_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:text="@{gasNow.time}"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                tools:text="12:00:01" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16sp"
+                    android:layout_height="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/refresh"
+                    android:src="@drawable/ic_refresh" />
+
+                <TextView
+                    android:id="@+id/last_updated_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:text="@{gasNow.time}"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    tools:text="12:00:01" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <GridLayout
