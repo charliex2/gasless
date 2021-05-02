@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
                     super.onOpen(webSocket, response);
+                    startSocketTime = 0;
                     Log.i("gasnow", "gasnow websocket connected");
                 }
             });

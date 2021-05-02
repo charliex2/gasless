@@ -17,6 +17,7 @@ import retrofit2.Response;
 
 public class GasPriceAppWidgetProvider extends AppWidgetProvider {
     GasNow gasNow;
+    int requestTime;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -59,44 +60,48 @@ public class GasPriceAppWidgetProvider extends AppWidgetProvider {
 
     private void requestGasPrice(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, RemoteViews views) {
         Log.i("gasnow", "requestGasPrice");
+        views.setTextViewText(R.id.last_updated_at, context.getResources().getString(R.string.updating));
         for (int appWidgetId : appWidgetIds) {
-            views.setTextViewText(R.id.last_updated_at, context.getResources().getString(R.string.updating));
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
 
         new Api(new Api.Builder(context)).gasNowApi.getGasPrice().enqueue(new Callback<GasNowResponse>() {
+
             @Override
             public void onResponse(Call<GasNowResponse> call, Response<GasNowResponse> response) {
                 Log.i("gasnow", "requestGasPrice success");
                 GasNowResponse body = response.body();
                 if (body == null) return;
                 gasNow = body.getData();
+                Log.i("gasnow", "widget onUpdate");
+                views.setTextViewText(R.id.rapid, gasNow.getRapidGWei());
+                views.setTextColor(R.id.rapid, gasNow.getColor(gasNow.getRapid()));
+                views.setTextViewText(R.id.fast, gasNow.getFastGWei());
+                views.setTextColor(R.id.fast, gasNow.getColor(gasNow.getFast()));
+                views.setTextViewText(R.id.standard, gasNow.getStandardGWei());
+                views.setTextColor(R.id.standard, gasNow.getColor(gasNow.getStandard()));
+                views.setTextViewText(R.id.slow, gasNow.getSlowGWei());
+                views.setTextColor(R.id.slow, gasNow.getColor(gasNow.getSlow()));
+                views.setTextViewText(R.id.last_updated_at, gasNow.getTime());
+
                 for (int appWidgetId : appWidgetIds) {
-                    Log.i("gasnow", "widget onUpdate");
-                    views.setTextViewText(R.id.rapid, gasNow.getRapidGWei());
-                    views.setTextColor(R.id.rapid, gasNow.getColor(gasNow.getRapid()));
-
-                    views.setTextViewText(R.id.fast, gasNow.getFastGWei());
-                    views.setTextColor(R.id.fast, gasNow.getColor(gasNow.getFast()));
-
-                    views.setTextViewText(R.id.standard, gasNow.getStandardGWei());
-                    views.setTextColor(R.id.standard, gasNow.getColor(gasNow.getStandard()));
-
-                    views.setTextViewText(R.id.slow, gasNow.getSlowGWei());
-                    views.setTextColor(R.id.slow, gasNow.getColor(gasNow.getSlow()));
-
-                    views.setTextViewText(R.id.last_updated_at, gasNow.getTime());
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
                 setActivityIntent(context, views);
+                requestTime = 0;
             }
 
             @Override
             public void onFailure(Call<GasNowResponse> call, Throwable t) {
                 Log.i("gasnow", "requestGasPrice failed" + t.getMessage());
-                for (int appWidgetId : appWidgetIds) {
+                if (requestTime < 5) {
+                    requestTime++;
+                    requestGasPrice(context, appWidgetManager, appWidgetIds, views);
+                } else {
                     views.setTextViewText(R.id.last_updated_at, context.getResources().getString(R.string.retry));
-                    appWidgetManager.updateAppWidget(appWidgetId, views);
+                    for (int appWidgetId : appWidgetIds) {
+                        appWidgetManager.updateAppWidget(appWidgetId, views);
+                    }
                 }
             }
         });
