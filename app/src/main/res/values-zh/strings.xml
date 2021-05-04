@@ -20,4 +20,8 @@
     <string name="data_source_text">本应用的数据来源于 SparkPool (gasnow.org).</string>
     <string name="feedback_text">任何意见或者建议、以及 Bug 报告请发送邮件至 themailfromw@gmail.com</string>
     <string name="buy_me_a_coffee_text">欢迎各位大佬打赏支持我的开发。我将珍惜每一个打赏的币</string>
+    <string name="find_new_version">发现新版本</string>
+    <string name="downloading">正在下载...</string>
+    <string name="update_now_btn">马上更新</string>
+    <string name="release_note">更新日志</string>
 </resources>

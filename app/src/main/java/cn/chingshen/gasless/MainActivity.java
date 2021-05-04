@@ -1,22 +1,34 @@
 package cn.chingshen.gasless;
 
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alibaba.fastjson.JSON;
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
+import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
+import com.allenliu.versionchecklib.v2.builder.UIData;
+import com.allenliu.versionchecklib.v2.callback.CustomDownloadingDialogListener;
+import com.allenliu.versionchecklib.v2.callback.RequestVersionListener;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,9 +38,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.chingshen.gasless.databinding.ActivityMainBinding;
+import cn.chingshen.gasless.dialogs.BaseDialog;
 import cn.chingshen.gasless.domain.vos.Dapp;
 import cn.chingshen.gasless.domain.vos.GasNow;
 import cn.chingshen.gasless.domain.vos.GasNowResponse;
+import cn.chingshen.gasless.domain.vos.VersionVO;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -74,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         SocketThread socketThread = new SocketThread();
         socketThread.start();
+
+        checkUpdate();
     }
 
     private void initCurrency() {
@@ -248,6 +264,79 @@ public class MainActivity extends AppCompatActivity {
             viewModel.requestEthPrice();
         }
     };
+
+
+    // 检查更新
+    private void checkUpdate() {
+        AllenVersionChecker.getInstance()
+                .requestVersion()
+                .setRequestUrl("http://defarmer-api.chingshen.cn/clients/android/latest-version")
+                .request(new RequestVersionListener() {
+
+                    @androidx.annotation.Nullable
+                    @Override
+                    public UIData onRequestVersionSuccess(DownloadBuilder downloadBuilder, String result) {
+                        Log.i("update", result);
+                        VersionVO versionVO = new Gson().fromJson(result, VersionVO.class);
+                        Log.i("update", versionVO.toString());
+                        if (!getAppVersionName().equals(versionVO.getData().getVersion())) {
+                            return UIData.create().setDownloadUrl(versionVO.getData().getDownload())
+                                    .setContent(versionVO.getData().getReleaseNote())
+                                    .setTitle(versionVO.getData().getVersion());
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void onRequestVersionFailure(String message) {
+                        Toast.makeText(MainActivity.this, "获取版本信息失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setCustomVersionDialogListener((context, versionBundle) -> {
+                    BaseDialog baseDialog = new BaseDialog(context, R.style.CustomerDialog, R.layout.dialog_update);
+                    baseDialog.setCanceledOnTouchOutside(false);
+                    TextView versionTv = baseDialog.findViewById(R.id.version);
+                    TextView updateContentTv = baseDialog.findViewById(R.id.update_content);
+                    versionTv.setText(versionBundle.getTitle());
+                    updateContentTv.setText(versionBundle.getContent());
+                    return baseDialog;
+                })
+                .setCustomDownloadingDialogListener(new CustomDownloadingDialogListener() {
+                    @Override
+                    public Dialog getCustomDownloadingDialog(Context context, int progress, UIData versionBundle) {
+                        BaseDialog baseDialog = new BaseDialog(context, R.style.CustomerDialog, R.layout.dialog_downloading);
+                        baseDialog.setCanceledOnTouchOutside(false);
+                        return baseDialog;
+                    }
+
+                    @Override
+                    public void updateUI(Dialog dialog, int progress, UIData versionBundle) {
+                        TextView versionTv = dialog.findViewById(R.id.version);
+                        TextView updateContentTv = dialog.findViewById(R.id.update_content);
+                        versionTv.setText(versionBundle.getTitle());
+                        updateContentTv.setText(versionBundle.getContent());
+                        ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
+                        progressBar.setProgress(progress);
+                    }
+                })
+                .executeMission(getApplicationContext());
+    }
+
+    /**
+     * 获取当前app version name
+     */
+    public String getAppVersionName() {
+        String appVersionName = "";
+        try {
+            PackageInfo packageInfo = getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0);
+            appVersionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("", e.getMessage());
+        }
+        return appVersionName;
+    }
 }
 
 

@@ -3,6 +3,6 @@
     android:initialLayout="@layout/layout_gas_price_appwidget"
     android:minWidth="500dp"
     android:minHeight="90dp"
-    android:updatePeriodMillis="30000"
+    android:previewImage="@drawable/appwidget_preview"
     android:resizeMode="vertical"
-    />
+    android:updatePeriodMillis="30000" />

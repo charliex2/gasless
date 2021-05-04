@@ -19,4 +19,8 @@
     <string name="data_source_text">The data is provided by SparkPool (gasnow.org).</string>
     <string name="feedback_text">Any questions and advices, please email me ( themailfromw@gmail.com ).</string>
     <string name="buy_me_a_coffee_text">Any coins are appreciated!</string>
+    <string name="find_new_version">Find New Version</string>
+    <string name="downloading">Downloading</string>
+    <string name="update_now_btn">Update Now</string>
+    <string name="release_note">Release Note</string>
 </resources>
