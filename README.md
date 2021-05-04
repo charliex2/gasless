@@ -1,13 +1,13 @@
+# Defarmer
+一个开源的 Eth Gas 价格监控安卓 app，支持添加到桌面微件。
 
-### WIFI 调试
-```
-adb devices;
-adb tcpip 5555;
-adb connect 192.168.2.4:5555
-```
+## 数据来源
+gasnow.org
+偶尔 gasnow.org api 请求会失败，socket 连接会失败。后续可能自己新增服务器。
 
-## 上传 apk 文件至 alioss
-```
-mv app/release/app-release.apk app/release/defarmer.apk
-ossutil cp app/release/defarmer.apk  oss://chingshen-public/defarmer/android-release/ -r -f
-```
+## 截图
+![appWidget](./screenshoot1.jpeg)
+![app界面](./screenshoot2.jpeg)
+
+## 安装包下载
+https://chingshen-public.oss-cn-hangzhou.aliyuncs.com/defarmer/android-release/defarmer.apk
